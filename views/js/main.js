@@ -1,20 +1,4 @@
-/*
-Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
-jank-free at 60 frames per second.
 
-There are two major issues in this code that lead to sub-60fps performance. Can
-you spot and fix both?
-
-
-Built into the code, you'll find a few instances of the User Timing API
-(window.performance), which will be console.log()ing frame rate data into the
-browser console. To learn more about User Timing API, check out:
-http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
-
-Creator:
-Cameron Pittman, Udacity Course Developer
-cameron *at* udacity *dot* com
-*/
 
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
@@ -452,7 +436,19 @@ var resizePizzas = function(size) {
 
   // Changes the value for the size of the pizza above the slider
   function changeSliderLabel(size) {
-      document.querySelector("#pizzaSize").innerHTML = size;
+    switch(size) {
+      case "1":
+        document.querySelector("#pizzaSize").innerHTML = "Small";
+        return;
+      case "2":
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        return;
+      case "3":
+        document.querySelector("#pizzaSize").innerHTML = "Large";
+        return;
+      default:
+        console.log("bug in changeSliderLabel");
+    }
   }
 
 
@@ -460,9 +456,18 @@ var resizePizzas = function(size) {
 
   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
 
-function sizeSwitcher (size) {
-        return size/100;//get the percentage of the size
+  function sizeSwitcher (size) {
+    switch(size) {
+      case "1":
+        return 0.25;
+      case "2":
+        return 0.3333;
+      case "3":
+        return 0.5;
+      default:
+        console.log("bug in sizeSwitcher");
     }
+  }
 
   function determineDx (elem, size) {
     var oldwidth = elem.offsetWidth;
@@ -482,7 +487,8 @@ function sizeSwitcher (size) {
   function changePizzaSizes(size) {
       var dx = determineDx(pizzaContainer[0], size);
       var newwidth = (pizzaContainer[0].offsetWidth + dx) + 'px';
-    for (var i = 0; i < pizzaContainer.length; i++) {
+      var containerLength=pizzaContainer.length
+    for (var i = 0; i < containerLength; i++) {
         pizzaContainer[i].style.width = newwidth;
     }
   }
@@ -538,7 +544,8 @@ function updatePositions() {
     for (var i = 0; i < 5; i++) {//calculate the distances each mover has to move and save them into an array
         phaselist.push(Math.sin((document.body.scrollTop / 1250) + (i % 5)));
     }
-    for (var j = 0; j < items.length; j++) {
+    var itemsLength=items.length;
+    for (var j = 0; j < itemsLength; j++) {
     var phaseindex=j%5;
     items[j].style.left = items[j].basicLeft + 100 * phaselist[phaseindex] + 'px';
   }
@@ -561,10 +568,10 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  var width = window.innerWidth;
-  var pizzaCount=Math.floor(width/256+1)*8;//calulate the pizza count according to the scrrenwidth;
+  var height = window.innerHeight;
+  var pizzaCount=Math.floor(height/256+1)*8;//calulate the pizza count according to the scrrenwidth;
 
-  for (var i = 0; i < pizzaCount; i++) {//why set 200 movers? I changed it to 24 and because there is three rows and 8 movers in each rows.
+  for (var i = 0; i < pizzaCount; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
